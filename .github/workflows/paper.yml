@@ -1,19 +1,17 @@
-on:
-  push:
-
+on: [push]
 jobs:
-  joss-article:
-
-    runs-on: ubuntu-18.04
+  paper:
+    runs-on: ubuntu-latest
+    name: Paper Draft
     steps:
-      - uses: actions/checkout@v1
-      - name: Create PDF
-        uses: docker://tarleb/paperdraft:latest
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build draft PDF
+        uses: tarleb/openjournals-draft-action@master
         with:
-          args: docs/joss/paper.md
-
+          paper-path: docs/joss/paper.md
       - name: Upload
         uses: actions/upload-artifact@v1
         with:
           name: paper
-          path: docs/joss/paper.pdf
+          path: docs/joss/paper-${{ github.sha }}.pdf
